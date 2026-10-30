@@ -48,6 +48,7 @@ function fakeHost(options = {}) {
   const providers = new Map()
   const children = []
   const spawns = []
+  const injectedDeps = []
   const ctx = {
     subagents: {
       registerProvider(provider) {
@@ -73,8 +74,14 @@ function fakeHost(options = {}) {
     },
   }
   if (options.systemPrompt !== undefined) ctx.systemPrompt = options.systemPrompt
+  if (options.useInject) {
+    ctx.inject = (deps, callback) => {
+      injectedDeps.push(...deps)
+      callback(ctx)
+    }
+  }
   apply(ctx, { executable: "agy-test", disposeGraceMs: 1000, ...options.config })
-  return { providers, children, spawns }
+  return { providers, children, spawns, injectedDeps }
 }
 
 /**
@@ -270,4 +277,25 @@ test("registers a delegation guidance section beside the tool", () => {
 test("works when the system-prompt service is absent", () => {
   const host = fakeHost()
   assert.ok(host.providers.get("antigravity"))
+  assert.deepEqual(host.injectedDeps, [])
+})
+
+test("waits for the system-prompt service instead of requiring it", () => {
+  const sections = []
+  const host = fakeHost({
+    useInject: true,
+    systemPrompt: {
+      getSectionOrder() {
+        return 2800
+      },
+      section(section) {
+        sections.push(section)
+        return () => {}
+      },
+    },
+  })
+  assert.deepEqual(host.injectedDeps, ["systemPrompt"])
+  assert.ok(host.providers.get("antigravity"))
+  assert.equal(sections.length, 1)
+  assert.equal(sections[0].name, "delegation:antigravity")
 })
