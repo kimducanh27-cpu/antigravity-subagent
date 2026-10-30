@@ -17,6 +17,7 @@
  *   --agent <name>       Antigravity agent to use
  *   --timeout <seconds>  Kill the run after this many seconds (default: none)
  *   --bypass-permissions Auto-approve every tool call (dangerous)
+ *   --disable-slash-commands  Turn off Antigravity's native skill/command expansion
  *   --help, -h           Show this help
  *
  * Environment:
@@ -44,6 +45,7 @@ Options:
   --agent <name>       Antigravity agent to use
   --timeout <seconds>  Kill the run after this many seconds (default: none)
   --bypass-permissions Auto-approve every tool call (dangerous)
+  --disable-slash-commands  Turn off Antigravity's native skill/command expansion
   --help, -h           Show this help`
 
 const EFFORTS = new Set(["low", "medium", "high", "xhigh", "max"])
@@ -53,7 +55,7 @@ const EFFORTS = new Set(["low", "medium", "high", "xhigh", "max"])
  * @returns {object} parsed options and the task text.
  */
 function parseArgs(argv) {
-  const options = { cwd: process.cwd(), task: undefined, timeoutSeconds: 0, bypass: false }
+  const options = { cwd: process.cwd(), task: undefined, timeoutSeconds: 0, bypass: false, disableSlashCommands: false }
   const words = []
   let index = 0
   while (index < argv.length) {
@@ -68,6 +70,11 @@ function parseArgs(argv) {
     }
     if (arg === "--bypass-permissions") {
       options.bypass = true
+      index += 1
+      continue
+    }
+    if (arg === "--disable-slash-commands") {
+      options.disableSlashCommands = true
       index += 1
       continue
     }
@@ -144,8 +151,8 @@ function buildArgv(options) {
     "stream-json",
     "--output-format",
     "stream-json",
-    "--disable-slash-commands",
   ]
+  if (options.disableSlashCommands) argv.push("--disable-slash-commands")
   if (options.model !== undefined) argv.push("--model", options.model)
   if (options.effort !== undefined) argv.push("--effort", options.effort)
   if (options.agent !== undefined) argv.push("--agent", options.agent)
@@ -202,9 +209,12 @@ async function run(options) {
   })
 
   try {
+    // A leading "/" is read by the CLI as its own interactive command and ends
+    // the run, so deliver such a task as ordinary text.
+    const text = options.task.trimStart().startsWith("/") ? `Task:\n${options.task}` : options.task
     child.stdin.write(`${JSON.stringify({
       event: "user",
-      message: { content: [{ type: "text", text: options.task }] },
+      message: { content: [{ type: "text", text }] },
     })}\n`)
     child.stdin.end()
   } catch (error) {

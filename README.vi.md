@@ -3,7 +3,15 @@
 Giao **một việc trọn gói** cho Google Antigravity, dùng đúng tài khoản và cài
 đặt sẵn có của nó. Không cần dán API key: chỉ cần đăng nhập `agy` một lần.
 
-Có 2 cách dùng:
+Repo có 2 gói cho DSH và 1 cách dùng độc lập:
+
+- **Não chính** — `provider/`: Antigravity trả lời chat trong DSH
+  (Gemini/Claude/GPT). Cần đăng nhập Google riêng, dùng chung quota; không chính
+  thức nên ưu tiên tài khoản phụ. Xem `provider/README.md`.
+- **Thợ** — gói gốc: tool `subagent_antigravity`, giao một việc trọn gói qua `agy`.
+- **Độc lập** — `scripts/agy-task.mjs` cho mọi agent.
+
+Chi tiết từng cách:
 
 ## 1. Cho mọi AI agent (Codex, Claude Code, Qoder, Cursor…)
 
@@ -75,6 +83,17 @@ Chi tiết + mẫu copy-paste:
 
 Mẹo tiết kiệm token: để Antigravity đọc file/log lớn, yêu cầu trả lời ngắn có
 cấu trúc, và chỉ giữ lại bản tóm tắt trong phiên chính.
+
+## Skill và lệnh slash
+
+- Antigravity **tự chọn skill/tool** phù hợp với việc bạn giao (browser, đọc tài
+  liệu, code, skill của plugin…). Cứ mô tả việc cần làm, đừng đoán tên tool.
+- **Không gửi lệnh slash** (`/browser`, `/usage`, `/model`…) như nội dung việc:
+  đây là lệnh tương tác của CLI, gửi vào chế độ một lần chạy sẽ làm CLI báo lỗi
+  và kết thúc. Muốn dùng lệnh slash thì chạy `agy` trực tiếp.
+- Nếu việc bắt đầu bằng `/`, cầu nối sẽ tự thêm `Task:` để CLI hiểu là văn bản
+  thay vì lệnh. Có thể tắt tính năng skill mặc định bằng `allowSlashCommands:
+  false` (plugin) hoặc `--disable-slash-commands` (script).
 
 ## Yêu cầu & bảo mật
 

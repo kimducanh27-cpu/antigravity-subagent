@@ -106,7 +106,7 @@ test("publishes a run and completes with the CLI answer", async () => {
   const run = await start(host, "do the thing")
   assert.match(host.children[0].state.stdinText, /"event":"user"/)
   assert.match(host.children[0].state.stdinText, /do the thing/)
-  assert.ok(host.spawns[0].argv.includes("--disable-slash-commands"))
+  assert.ok(!host.spawns[0].argv.includes("--disable-slash-commands"))
   host.children[0].stdout.write(`${JSON.stringify({ event: "init", init: { permission_mode: "always-proceed" } })}\n`)
   host.children[0].stdout.write(`${JSON.stringify({ event: "result", result: { status: "SUCCESS", response: "done\n" } })}\n`)
   host.children[0].exit(0)
@@ -151,8 +151,26 @@ test("builds the headless argv from configuration", async () => {
   await run.dispose()
 })
 
-test("maps an error envelope and keeps partial output", async () => {
+test("can opt out of native skill expansion", async () => {
+  const host = fakeHost({ config: { allowSlashCommands: false } })
+  const run = await start(host, "x")
+  assert.ok(host.spawns[0].argv.includes("--disable-slash-commands"))
+  host.children[0].exit(0)
+  await run.result
+  await run.dispose()
+})
+
+test("delivers a task that starts with a slash command as text", async () => {
   const host = fakeHost()
+  const run = await start(host, "/usage")
+  const payload = JSON.parse(host.children[0].state.stdinText.trim())
+  assert.equal(payload.message.content[0].text, "Task:\n/usage")
+  host.children[0].exit(0)
+  await run.result
+  await run.dispose()
+})
+
+test("maps an error envelope and keeps partial output", async () => {  const host = fakeHost()
   const run = await start(host, "do the thing")
   host.children[0].stdout.write(`${JSON.stringify({ event: "step_update", step_update: { step_type: "agent_response", text_delta: "partial" } })}\n`)
   host.children[0].stdout.write(`${JSON.stringify({ event: "result", result: { status: "ERROR", error: "boom" } })}\n`)

@@ -5,14 +5,38 @@ using its own **cached authentication and settings**. No API key is copied,
 stored, or forwarded: the Antigravity CLI (`agy`) signs in once, and every
 delegation reuses that login.
 
-This repository ships two ways to use it:
+This repository ships three ways to use Antigravity:
 
-1. **DeepSeek Harness plugin** — a bundle that exposes the
-   `subagent_antigravity` tool inside [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
-2. **Standalone bridge** — `scripts/agy-task.mjs`, a dependency-free Node.js
+1. **Model provider** — the `provider/` bundle registers Antigravity models
+   (Gemini/Claude/GPT) in [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness),
+   so the main chat is answered by Antigravity.
+2. **Subagent** — the root bundle exposes the `subagent_antigravity` tool for
+   one-shot delegation to the Antigravity agent.
+3. **Standalone bridge** — `scripts/agy-task.mjs`, a dependency-free Node.js
    script any agent (Codex, Claude Code, Qoder, Cursor, …) can clone and run.
 
 Vietnamese quick start: [README.vi.md](README.vi.md).
+
+## Repository layout
+
+| Path | What it is |
+|---|---|
+| root | `dsh-subagent-antigravity` — worker bundle (one-shot delegation via `agy`) |
+| `provider/` | `dsh-antigravity` — model-provider bundle (Antigravity as the main brain) |
+| `scripts/` | standalone bridge, scratch-profile and P0 smoke tooling |
+| `install/` | desktop installer and rollback (see `install/README.vi.md`) |
+| `docs/` | research notes, design spec, evidence and the Vietnamese guide |
+
+## Use Antigravity as the model provider
+
+`provider/` registers Antigravity in DSH's model picker and streams answers
+through Cloud Code Assist. It keeps its own Google OAuth credentials under
+`$DSH_HOME/storages/antigravity-oauth.json` — separate from the `agy` login used
+by the subagent — and consumes the same subscription quota.
+
+> Unofficial integration: use it only with an account you are authorized to
+> use, and prefer a secondary Google account. See `provider/README.md`.
+> Desktop install and rollback: `install/README.vi.md`.
 
 ## Requirements
 
@@ -98,7 +122,7 @@ A one-shot subagent only knows what you put in the task. The plugin also
 registers a short `delegation:antigravity` system-prompt section with the same
 checklist, so a Harness leader sees it without opening this file.
 
-- Playbook: [DELEGATION.md](DELEGATION.md) — when to delegate, the six-part
+- Playbook: [DELEGATION.md](DELEGATION.md) — when to delegate, the seven-part
   brief, two filled examples, anti-patterns, the verification loop, and
   token-saving rules.
 - Templates: [brief](prompts/brief.md), [review](prompts/review.md),
@@ -123,7 +147,7 @@ row config):
 | `agent` | — | `--agent` |
 | `permissionMode` | `settings` | `settings` honors the CLI's permission settings; `bypass` adds `--dangerously-skip-permissions` |
 | `sandbox` | `false` | Adds `--sandbox` |
-| `allowSlashCommands` | `false` | When `false`, adds `--disable-slash-commands` so the task is treated as literal text |
+| `allowSlashCommands` | `true` | Leaves Antigravity's native skill/command expansion enabled. Set `false` to add `--disable-slash-commands`; a task that starts with `/` is always delivered as text |
 | `env` | `{}` | Extra environment entries merged over the scrubbed parent environment |
 | `disposeGraceMs` | `3000` | Grace period for the subprocess termination ladder |
 
@@ -156,6 +180,20 @@ Both entry points speak the Antigravity CLI's headless JSON protocol:
 
 Each delegation is a fresh, stateless CLI run (no `--continue`), executed in the
 caller's working directory.
+
+### Skills and slash commands
+
+Antigravity decides which of its own skills and tools to use from the task text.
+Its catalog (browser, document, code, and plugin skills) is available to the
+child, and native skill expansion is on by default — phrase the task normally
+("open the docs page and summarize it") and let it choose.
+
+Slash commands such as `/browser`, `/model`, or `/usage` are **interactive CLI
+commands**. They cannot run inside a one-shot delegation: the CLI answers them
+outside the event stream and ends the run. The bridge delivers any task that
+starts with `/` as ordinary text (`Task:\n…`) so it cannot abort. Set
+`allowSlashCommands: false` (or pass `--disable-slash-commands` to the standalone
+script) to turn native expansion off entirely.
 
 ## Security
 
@@ -190,6 +228,7 @@ diagnostic truncation, and the standalone CLI parser are covered.
 | `authentication required` | Run `agy` once interactively and sign in |
 | `invalid model selection` | Check `agy models`; pin a valid `model` or omit it |
 | A tool the agent needs was denied | Add a scoped rule under `permissions.allow` in `~/.gemini/antigravity-cli/settings.json`. Do not enable `permissionMode: bypass` just for one run: it is a profile-wide setting, not a per-run option, and auto-approves every tool |
+| I wanted to use `/browser` or another slash command | Slash commands are interactive-only and end a one-shot run. Describe the capability instead ("use the browser to open …"); the agent picks its own skill/tool |
 | Plugin installed but no tool | Enable the bundle, then start a new session so the tool schema is composed; a running session does not gain it retroactively |
 | `dsh --version` differs from the app | Ignore it: the CLI is a separate install and cannot manage the desktop app's profile |
 

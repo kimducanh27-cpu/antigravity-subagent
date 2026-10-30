@@ -163,6 +163,19 @@ Run node --test test/client.test.ts and include the real output.
 4. Reduce the result to a 2-line summary for your own context; drop the raw output.
 5. Only then integrate.
 
+## Skills and slash commands
+
+Antigravity picks its own skills and tools from the task text; its catalog
+(browser, document, code, and plugin skills) is available to the child. Describe
+the capability you want and let it choose — do not name a tool you are guessing
+at.
+
+Slash commands (`/browser`, `/model`, `/usage`, …) are interactive CLI commands.
+They cannot run inside a one-shot delegation: the CLI answers them outside the
+event stream and ends the run. The bridge delivers a task that starts with `/` as
+ordinary text, so it will not abort, but it will not execute the command either.
+When you need a slash command, run `agy` directly.
+
 ## Handling failures
 
 A headless run can fail in a few distinguishable ways; match the fix to the

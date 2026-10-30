@@ -92,6 +92,10 @@ Ready-made briefs: [review](prompts/review.md),
 ## Rules
 
 - **One task per delegation.** The target does not accept follow-up messages.
+- **Do not send slash commands as the task** (`/browser`, `/usage`, `/model`, …):
+  they are interactive-only and cannot run in a one-shot delegation. Describe the
+  capability you want ("use the browser to open …") and let Antigravity pick its
+  own skill/tool.
 - **Do not pass secrets** in the task text; it may reach a third-party model.
 - **Review-only means review-only.** Say "report findings; do not edit files" in
   the task when you do not want changes.
