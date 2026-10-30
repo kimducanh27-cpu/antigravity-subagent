@@ -291,6 +291,7 @@ test("registers a delegation guidance section beside the tool", () => {
   assert.match(sections[0].text, /one self-contained task/)
   assert.match(sections[0].text, /do not edit/)
   assert.match(sections[0].text, /Verify before answering/)
+  assert.match(sections[0].text, /MCP server/)
 })
 
 test("works when the system-prompt service is absent", () => {

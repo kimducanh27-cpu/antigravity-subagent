@@ -96,6 +96,13 @@ Ready-made briefs: [review](prompts/review.md),
   they are interactive-only and cannot run in a one-shot delegation. Describe the
   capability you want ("use the browser to open …") and let Antigravity pick its
   own skill/tool.
+- **Use its capabilities deliberately.** Name a skill, MCP server, or plugin only
+  when you know it is installed (`agy plugin list`, `agy mcp list`); otherwise ask
+  the subagent to check availability and report. Never ask a one-shot run to
+  install or enable one.
+- **Scope external access.** For MCP/plugin tasks, say read-only or read-write and
+  do not request writes to Figma, Drive, or cloud resources unless the user asked.
+  Ask for a summary plus artifact paths/URLs instead of raw dumps.
 - **Do not pass secrets** in the task text; it may reach a third-party model.
 - **Review-only means review-only.** Say "report findings; do not edit files" in
   the task when you do not want changes.

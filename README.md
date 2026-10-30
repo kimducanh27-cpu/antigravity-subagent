@@ -181,12 +181,18 @@ Both entry points speak the Antigravity CLI's headless JSON protocol:
 Each delegation is a fresh, stateless CLI run (no `--continue`), executed in the
 caller's working directory.
 
-### Skills and slash commands
+### Skills, MCP, and slash commands
 
 Antigravity decides which of its own skills and tools to use from the task text.
 Its catalog (browser, document, code, and plugin skills) is available to the
 child, and native skill expansion is on by default — phrase the task normally
 ("open the docs page and summarize it") and let it choose.
+
+It can also call the **MCP servers and plugins installed on the machine** (Figma,
+Google Docs/Drive, Firebase, Chrome DevTools, …). Name one only when you know it
+is installed — check in your own shell with `agy plugin list` and `agy mcp list`
+— and state whether the task is read-only or read-write. Do not ask a one-shot run
+to install or enable anything; if a capability is missing, have it report that.
 
 Slash commands such as `/browser`, `/model`, or `/usage` are **interactive CLI
 commands**. They cannot run inside a one-shot delegation: the CLI answers them

@@ -88,6 +88,10 @@ cấu trúc, và chỉ giữ lại bản tóm tắt trong phiên chính.
 
 - Antigravity **tự chọn skill/tool** phù hợp với việc bạn giao (browser, đọc tài
   liệu, code, skill của plugin…). Cứ mô tả việc cần làm, đừng đoán tên tool.
+- Nó cũng gọi được **MCP/plugin đã cài** (Figma, Google Docs/Drive, Firebase,
+  Chrome DevTools…). Chỉ nêu tên skill/MCP/plugin khi chắc nó đã cài — kiểm tra
+  bằng `agy plugin list`, `agy mcp list`; nếu không, yêu cầu nó tự kiểm tra và
+  báo lại. Ghi rõ chỉ đọc hay được ghi; đừng bảo nó cài/bật trong một lần chạy.
 - **Không gửi lệnh slash** (`/browser`, `/usage`, `/model`…) như nội dung việc:
   đây là lệnh tương tác của CLI, gửi vào chế độ một lần chạy sẽ làm CLI báo lỗi
   và kết thúc. Muốn dùng lệnh slash thì chạy `agy` trực tiếp.

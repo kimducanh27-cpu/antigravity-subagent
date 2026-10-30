@@ -176,6 +176,29 @@ event stream and ends the run. The bridge delivers a task that starts with `/` a
 ordinary text, so it will not abort, but it will not execute the command either.
 When you need a slash command, run `agy` directly.
 
+## Skills, MCP, and plugins
+
+Antigravity brings its own skill catalog and can call the MCP servers and plugins
+installed on the machine (browser, Figma, Google Docs/Slides/Drive, Firebase,
+Chrome DevTools, …). The child selects them itself; your job is to make the
+capability requirement explicit.
+
+- **Describe the capability, not a guessed tool name.** "Use the browser to open
+  …" beats "call browser_navigate".
+- **Name a skill/MCP/plugin only when you know it is installed.** Check in your
+  own shell with `agy plugin list` and `agy mcp list` before writing the brief;
+  otherwise ask the subagent to verify availability.
+- **Require an explicit fallback.** "If the Figma MCP is unavailable or
+  unauthenticated, stop and report; do not substitute a different source."
+- **For capability-dependent tasks, ask for a check first**: "First confirm
+  <skill/MCP> is available; if not, report and stop."
+- **Bound external access.** Say read-only or read-write; do not ask for writes
+  to Figma, Drive, or cloud resources unless the user asked for them.
+- **Keep artifacts out of the leader.** Ask for a summary plus paths/URLs of
+  screenshots or documents, not raw dumps.
+- **Never ask a one-shot run to install or enable** a plugin, skill, or MCP
+  server. If something is missing, report it and let the leader handle setup.
+
 ## Handling failures
 
 A headless run can fail in a few distinguishable ways; match the fix to the

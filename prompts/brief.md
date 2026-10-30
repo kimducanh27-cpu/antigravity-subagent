@@ -23,6 +23,10 @@ Paste the relevant excerpt or error; do not say "see above".>
 - Do not: <install dependencies | change public APIs | reformat untouched code | ...>
 - One run, one task. No follow-up questions.
 
+#### Capabilities (optional)
+- Use: <skill / MCP server / plugin, only if installed>
+- If unavailable: <stop and report | fall back to X>
+
 #### Acceptance criteria
 - [ ] <objective check 1>
 - [ ] <objective check 2>
@@ -43,6 +47,7 @@ Paste the relevant excerpt or error; do not say "see above".>
 | Context | What do I know that the subagent cannot infer? |
 | Files | Where may it look, and where may it write? |
 | Constraints | What must it not do, and how many tasks? |
+| Capabilities | Which skill/MCP/plugin may it use, and what if it is missing? |
 | Acceptance | How will I decide the answer is correct? |
 | Output | How will I parse the answer without asking again? |
 | Verify | What should it check before it claims done? |

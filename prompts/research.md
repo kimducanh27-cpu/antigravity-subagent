@@ -16,6 +16,10 @@ already tried or rejected.>
 - Prefer: <official docs | GitHub repos | release notes>
 - Use web search and read the pages; do not invent URLs or facts.
 
+#### Capabilities (optional)
+- Use: <browser MCP / a specific skill, only if installed>
+- If unavailable: report it and continue with web search/fetch.
+
 #### Constraints
 - Source budget: <N> sources. Ignore marketing pages.
 - One run, one task. No follow-up questions.
