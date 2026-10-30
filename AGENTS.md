@@ -73,6 +73,22 @@ The call returns a child id immediately; the answer arrives in a completion
 notice. The tool is registered only for sessions composed after the bundle is
 enabled.
 
+## 4. Write a usable brief
+
+One run = one task, and the subagent cannot see your chat, files, or tool
+results. Read [DELEGATION.md](DELEGATION.md) before delegating, and start from
+[prompts/brief.md](prompts/brief.md):
+
+- one goal, one deliverable;
+- the facts it cannot infer, with exact paths;
+- scope and permissions — for reviews, "report only; do not edit files";
+- acceptance criteria and the exact output format;
+- no secrets, and state that no follow-up will come.
+
+Ready-made briefs: [review](prompts/review.md),
+[implement](prompts/implement.md), [research](prompts/research.md),
+[debug](prompts/debug.md). Verify the answer yourself before using it.
+
 ## Rules
 
 - **One task per delegation.** The target does not accept follow-up messages.

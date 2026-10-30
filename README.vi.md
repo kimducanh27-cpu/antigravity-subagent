@@ -50,6 +50,31 @@ qua thông báo hoàn thành.
 > xem/quản lý được profile của app Electron). Chỉ cần app đang chạy bản có plugin
 > đã bật và mở **phiên mới** sau khi bật là tool xuất hiện.
 
+## Giao việc sao cho hiệu quả
+
+Antigravity **không thấy chat của bạn**, không thấy file bạn đã đọc, không thấy
+kết quả tool. Mỗi lần chạy chỉ làm **một việc** và không hỏi lại. Vì vậy hãy viết
+brief đủ 6 phần:
+
+1. **Mục tiêu** — một câu, một kết quả.
+2. **Bối cảnh** — thông tin nó không thể tự suy ra (phiên bản, lỗi, đoạn code).
+3. **Đường dẫn** — file/glob được đọc, file được ghi (hoặc "không sửa file").
+4. **Ràng buộc** — chỉ đọc hay được sửa, không thêm dependency, phạm vi.
+5. **Tiêu chí đạt** — kiểm tra nào phải đúng.
+6. **Định dạng đầu ra** — bảng `file:dòng`, diff, JSON… kèm giới hạn độ dài.
+
+Đừng đưa bí mật vào brief; hãy tự kiểm tra lại câu trả lời trước khi dùng.
+
+Chi tiết + mẫu copy-paste:
+
+- [DELEGATION.md](DELEGATION.md) — playbook đầy đủ (tiếng Anh).
+- [prompts/brief.md](prompts/brief.md) — mẫu trống.
+- [prompts/review.md](prompts/review.md), [prompts/implement.md](prompts/implement.md),
+  [prompts/research.md](prompts/research.md), [prompts/debug.md](prompts/debug.md).
+
+Mẹo tiết kiệm token: để Antigravity đọc file/log lớn, yêu cầu trả lời ngắn có
+cấu trúc, và chỉ giữ lại bản tóm tắt trong phiên chính.
+
 ## Yêu cầu & bảo mật
 
 - Cài Antigravity CLI (`agy --version` chạy được) và đăng nhập một lần.

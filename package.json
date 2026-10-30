@@ -20,7 +20,10 @@
     "icon.svg",
     "scripts/agy-task.mjs",
     "AGENTS.md",
-    "README.md"
+    "DELEGATION.md",
+    "prompts/*.md",
+    "README.md",
+    "README.vi.md"
   ],
   "icon": "./icon.svg",
   "license": "MIT",

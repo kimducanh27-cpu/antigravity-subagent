@@ -92,6 +92,23 @@ install it again. The profile links the clone you installed, so updating is just
 Reinstalling is only for a machine where the bundle is absent. A running session
 does not gain a newly mounted tool retroactively.
 
+### Briefing the subagent (leaders)
+
+A one-shot subagent only knows what you put in the task. The plugin also
+registers a short `delegation:antigravity` system-prompt section with the same
+checklist, so a Harness leader sees it without opening this file.
+
+- Playbook: [DELEGATION.md](DELEGATION.md) — when to delegate, the six-part
+  brief, two filled examples, anti-patterns, the verification loop, and
+  token-saving rules.
+- Templates: [brief](prompts/brief.md), [review](prompts/review.md),
+  [implement](prompts/implement.md), [research](prompts/research.md),
+  [debug](prompts/debug.md).
+
+The short version: one goal; the context it cannot infer; exact paths; scope and
+permissions; acceptance criteria; the exact output format; no secrets; verify
+the answer before using it.
+
 ### Configuration
 
 The plugin row accepts these fields (set them in the profile's bundle patch or

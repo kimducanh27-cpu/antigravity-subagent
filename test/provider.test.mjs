@@ -72,6 +72,7 @@ function fakeHost(options = {}) {
       return callback()
     },
   }
+  if (options.systemPrompt !== undefined) ctx.systemPrompt = options.systemPrompt
   apply(ctx, { executable: "agy-test", disposeGraceMs: 1000, ...options.config })
   return { providers, children, spawns }
 }
@@ -241,4 +242,32 @@ test("rejects invalid configuration at activation", async () => {
   assert.throws(() => fakeHost({ config: { disposeGraceMs: 0 } }), /positive finite/)
   assert.throws(() => fakeHost({ config: { providerName: "  " } }), /config\.providerName/)
   assert.throws(() => fakeHost({ config: { permissionMode: "always" } }), /config\.permissionMode/)
+})
+
+test("registers a delegation guidance section beside the tool", () => {
+  const sections = []
+  const host = fakeHost({
+    systemPrompt: {
+      getSectionOrder(name) {
+        return name === "TOOL_SUBAGENT" ? 2800 : 0
+      },
+      section(section) {
+        sections.push(section)
+        return () => {}
+      },
+    },
+  })
+  assert.ok(host.providers.get("antigravity"))
+  assert.equal(sections.length, 1)
+  assert.equal(sections[0].name, "delegation:antigravity")
+  assert.equal(sections[0].order, 2801)
+  assert.equal(sections[0].interpolate, false)
+  assert.match(sections[0].text, /subagent_antigravity/)
+  assert.match(sections[0].text, /complete brief/)
+  assert.match(sections[0].text, /do not edit files/)
+})
+
+test("works when the system-prompt service is absent", () => {
+  const host = fakeHost()
+  assert.ok(host.providers.get("antigravity"))
 })
