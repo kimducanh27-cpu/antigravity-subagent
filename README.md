@@ -58,11 +58,13 @@ Agents that need structured guidance can read [AGENTS.md](AGENTS.md).
 ## Use it in DeepSeek Harness (plugin)
 
 1. Clone this repository anywhere, for example into your workspace.
-2. Install the bundle. In the Harness Web UI open **Plugins → Add plugin** and
-   enter the absolute path of the clone, or from an agent call:
+2. Install the bundle **only if it is not already listed**. In the Harness Web UI
+   open **Plugins → Add plugin** and enter the absolute path of the clone, or from
+   an agent call:
 
    ```text
-   plugin_manager install_bundle <absolute path to the clone>
+   plugin_manager list_bundles                                  # is it already there?
+   plugin_manager install_bundle <absolute path to the clone>   # only if absent
    ```
 
 3. Enable **Antigravity subagent** under **Plugins → Installed plugins**. Two
@@ -77,6 +79,18 @@ Agents that need structured guidance can read [AGENTS.md](AGENTS.md).
    The call returns a child id immediately; the final answer arrives as a
    completion notice. Antigravity runs are one-shot: they accept no follow-up
    messages.
+
+### Already installed, or updating
+
+If **Plugins → Installed plugins** already lists **Antigravity subagent**, do not
+install it again. The profile links the clone you installed, so updating is just:
+
+1. edit the files in place;
+2. toggle the bundle off and on (or restart the app) so the new code loads;
+3. start a new session so the tool schema is composed.
+
+Reinstalling is only for a machine where the bundle is absent. A running session
+does not gain a newly mounted tool retroactively.
 
 ### Configuration
 
@@ -97,7 +111,11 @@ row config):
 | `disposeGraceMs` | `3000` | Grace period for the subprocess termination ladder |
 
 The display title, description, and icon come from `locale/*.json` and
-`icon.svg`; the bundle is built and tested for DeepSeek Harness `0.2.1-rc.5`.
+`icon.svg`. The plugin is tested against the bundled DeepSeek Harness desktop
+runtime `0.2.1-rc.5`. The `dsh` CLI on `PATH` is a **separate installation**:
+its `--version` (for example `0.2.0-rc.2`) does not describe the running desktop
+app, and it cannot list or manage an Electron-managed profile. Do not treat a
+CLI/app version difference as a fault.
 
 > The Harness “Experimental plugins” list is compiled into the shipped UI, so a
 > locally installed bundle appears under **Installed plugins**, not in that
@@ -155,7 +173,8 @@ diagnostic truncation, and the standalone CLI parser are covered.
 | `authentication required` | Run `agy` once interactively and sign in |
 | `invalid model selection` | Check `agy models`; pin a valid `model` or omit it |
 | A tool the agent needs was denied | Add a scoped rule under `permissions.allow` in the CLI settings, or use `permissionMode: bypass` for that run only |
-| Plugin installed but no tool | Enable the bundle, then start a new session so the tool schema is composed |
+| Plugin installed but no tool | Enable the bundle, then start a new session so the tool schema is composed; a running session does not gain it retroactively |
+| `dsh --version` differs from the app | Ignore it: the CLI is a separate install and cannot manage the desktop app's profile |
 
 ## License
 

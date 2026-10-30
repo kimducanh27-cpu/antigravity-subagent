@@ -4,6 +4,22 @@ This repository lets a coding agent delegate one self-contained task to
 **Google Antigravity** and read its final answer. Pick the path that matches your
 host.
 
+## 0. Check before installing anything
+
+If the target profile already lists `dsh-subagent-antigravity` — in the profile
+`package.json` under `dsh.profile.bundles`, in **Plugins → Installed plugins**,
+or through `plugin_manager list_bundles` — do **not** install it again.
+Reinstalling is unnecessary and may replace a working link; enable the bundle and
+start a new session instead.
+
+To update an existing install: the profile links this clone, so edit the files in
+place, then toggle the bundle off and on (or restart the app). Do not reinstall.
+
+The `dsh` CLI on `PATH` is a separate installation from the desktop app. Its
+`--version` (for example `0.2.0-rc.2`) does not describe the running app, and it
+cannot list or manage an Electron-managed profile. Do not report a CLI/app
+version difference as a fault.
+
 ## 1. Check the CLI first
 
 Run `agy --version`. If it fails, install the Antigravity CLI and make sure it is
@@ -39,10 +55,12 @@ node scripts/agy-task.mjs --cwd . --timeout 600 \
 
 ## 3. If you are DeepSeek Harness
 
-Install this clone as a bundle and enable it:
+Install this clone as a bundle **only when it is not already installed** (see
+step 0), then enable it:
 
 ```text
-plugin_manager install_bundle <absolute path to this clone>
+plugin_manager list_bundles                 # look for dsh-subagent-antigravity
+plugin_manager install_bundle <absolute path to this clone>   # only if absent
 ```
 
 Then call the tool (one task per run; no follow-up messages):

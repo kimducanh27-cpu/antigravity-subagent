@@ -32,7 +32,10 @@ node scripts/agy-task.mjs --cwd . --timeout 600 \
 
 1. Clone repo về máy.
 2. Mở **Plugins → Add plugin**, nhập đường dẫn tuyệt đối tới thư mục vừa clone
-   (hoặc gọi `plugin_manager install_bundle <đường dẫn>`).
+   (hoặc gọi `plugin_manager install_bundle <đường dẫn>`) — **chỉ khi chưa cài**.
+   Nếu **Plugins → Installed plugins** đã có **Antigravity subagent** thì đừng cài
+   lại: profile đang trỏ thẳng vào thư mục clone, chỉ cần sửa file tại chỗ rồi
+   tắt/bật bundle (hoặc khởi động lại app).
 3. Bật **Antigravity subagent** trong **Plugins → Installed plugins**.
 4. Trong chat, nhờ agent dùng tool `subagent_antigravity`:
 
@@ -42,6 +45,10 @@ node scripts/agy-task.mjs --cwd . --timeout 600 \
 
 Mỗi lần gọi là một việc độc lập; không chat tiếp với việc đó được. Kết quả về
 qua thông báo hoàn thành.
+
+> `dsh --version` trên máy có thể khác phiên bản app (CLI là bản cài riêng, không
+> xem/quản lý được profile của app Electron). Chỉ cần app đang chạy bản có plugin
+> đã bật và mở **phiên mới** sau khi bật là tool xuất hiện.
 
 ## Yêu cầu & bảo mật
 
