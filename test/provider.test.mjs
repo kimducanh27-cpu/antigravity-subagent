@@ -270,8 +270,9 @@ test("registers a delegation guidance section beside the tool", () => {
   assert.equal(sections[0].order, 2801)
   assert.equal(sections[0].interpolate, false)
   assert.match(sections[0].text, /subagent_antigravity/)
-  assert.match(sections[0].text, /complete brief/)
-  assert.match(sections[0].text, /do not edit files/)
+  assert.match(sections[0].text, /one self-contained task/)
+  assert.match(sections[0].text, /do not edit/)
+  assert.match(sections[0].text, /Verify before answering/)
 })
 
 test("works when the system-prompt service is absent", () => {

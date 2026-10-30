@@ -189,7 +189,7 @@ diagnostic truncation, and the standalone CLI parser are covered.
 | `Antigravity CLI was not found` | Install `agy`, put it on `PATH`, or set `executable` / `AGY_BIN` |
 | `authentication required` | Run `agy` once interactively and sign in |
 | `invalid model selection` | Check `agy models`; pin a valid `model` or omit it |
-| A tool the agent needs was denied | Add a scoped rule under `permissions.allow` in the CLI settings, or use `permissionMode: bypass` for that run only |
+| A tool the agent needs was denied | Add a scoped rule under `permissions.allow` in `~/.gemini/antigravity-cli/settings.json`. Do not enable `permissionMode: bypass` just for one run: it is a profile-wide setting, not a per-run option, and auto-approves every tool |
 | Plugin installed but no tool | Enable the bundle, then start a new session so the tool schema is composed; a running session does not gain it retroactively |
 | `dsh --version` differs from the app | Ignore it: the CLI is a separate install and cannot manage the desktop app's profile |
 

@@ -26,8 +26,9 @@ Scoped fix or feature. Replace `<...>`.
 - [ ] No change outside the listed files
 
 #### Output format
-1 short paragraph (what changed and why), then a unified diff, then the real
-test output. No other commentary.
+1 short paragraph (what changed and why), then a unified diff (max 80 lines),
+then the real test output (summary, max 30 lines; omit passing cases).
+No other commentary.
 
 #### Verify before answering
 Run <test command> and include the actual output. Re-read your diff before sending.

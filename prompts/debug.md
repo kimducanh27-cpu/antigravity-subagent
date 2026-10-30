@@ -32,10 +32,11 @@ Find the root cause of <symptom> and propose the smallest correct fix.
 #### Output format
 1. Root cause (<= 3 sentences, with file:line).
 2. Evidence.
-3. Minimal fix (unified diff) or "diagnosis only".
-4. Verification command and its real output.
+3. Minimal fix (unified diff, max 80 lines) or "diagnosis only".
+4. Verification command and its relevant output (max 30 lines; omit passing cases).
 No preamble.
 
 #### Verify before answering
-Reproduce the failure, apply the fix, re-run the same command, and show both results.
+If diagnosis-only: run the reproduction and trace the cited failure path without editing files.
+If fixing: reproduce the failure, apply the fix, re-run the same command, and show both results.
 ```

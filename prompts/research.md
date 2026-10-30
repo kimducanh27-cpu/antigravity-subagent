@@ -17,7 +17,7 @@ already tried or rejected.>
 - Use web search and read the pages; do not invent URLs or facts.
 
 #### Constraints
-- Timebox: <N> sources. Ignore marketing pages.
+- Source budget: <N> sources. Ignore marketing pages.
 - One run, one task. No follow-up questions.
 - If sources conflict, say so and explain the tie-breaker.
 
@@ -32,5 +32,5 @@ already tried or rejected.>
 Max <N> words. No preamble.
 
 #### Verify before answering
-Re-open each URL you cite; drop any you did not read.
+Verify every cited URL is valid and directly supports the claim; drop the rest.
 ```

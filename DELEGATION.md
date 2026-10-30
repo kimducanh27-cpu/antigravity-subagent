@@ -24,9 +24,9 @@ Keep it in the leader when the work is:
 - a one-line change or a decision that defines architecture;
 - already answered by what you have read.
 
-## The brief in six parts
+## The brief in seven parts
 
-The brief is the whole interface. Fill all six; leave nothing implied.
+The brief is the whole interface. Fill all seven; leave nothing implied.
 
 1. **Goal** — one sentence, one deliverable.
 2. **Context** — facts the subagent cannot infer: runtime, versions, the failing
@@ -39,9 +39,8 @@ The brief is the whole interface. Fill all six; leave nothing implied.
 5. **Acceptance criteria** — the pass/fail checks the answer must satisfy.
 6. **Output contract** — the exact shape (findings as `file:line` + severity;
    a patch summary; JSON; a table) and a length cap. Ban conversational filler.
-
-Then add **verification**: the command or check the subagent should run before
-answering, and what you will run yourself afterwards.
+7. **Verification** — the command or check the subagent should run before
+   answering, and what you will run yourself afterwards.
 
 Start from [prompts/brief.md](prompts/brief.md). Ready-made variants live in
 [`prompts/`](prompts/): review, implement, research, debug.
@@ -163,6 +162,25 @@ Run node --test test/client.test.ts and include the real output.
 3. Spot-check `file:line` citations and diffs.
 4. Reduce the result to a 2-line summary for your own context; drop the raw output.
 5. Only then integrate.
+
+## Handling failures
+
+A headless run can fail in a few distinguishable ways; match the fix to the
+diagnostic instead of retrying the same brief.
+
+| Diagnostic | Meaning | Leader action |
+|---|---|---|
+| `category: authentication` | The CLI has no cached login | Sign in once interactively (`agy`), then retry |
+| `category: product-error` (model or permission text) | Bad `--model`, or a tool the CLI refused | Fix the model slug; for refusals add a scoped `permissions.allow` rule |
+| `category: protocol` or `process` (with exit code) | The CLI died before a result | Retry once; then split the task or check `agy --version` |
+| `category: invalid-result` | `SUCCESS` with an empty answer | Tighten the brief or ask for a shorter output |
+| `category: cancelled` / `interrupted` | The run was stopped | Re-run only if stopping was not intentional |
+| Standalone bridge exit `124` | `--timeout` expired | Split the task or raise `--timeout` |
+
+Headless Antigravity soft-denies tools it cannot ask about: the run may still
+succeed with part of the work skipped. When a task needs writes or shell
+commands, either pre-allow those tools in the CLI settings or do that step in the
+leader. Do not retry a denied task unchanged.
 
 ## Token-saving playbook
 

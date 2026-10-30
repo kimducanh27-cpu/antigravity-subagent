@@ -54,7 +54,7 @@ qua thông báo hoàn thành.
 
 Antigravity **không thấy chat của bạn**, không thấy file bạn đã đọc, không thấy
 kết quả tool. Mỗi lần chạy chỉ làm **một việc** và không hỏi lại. Vì vậy hãy viết
-brief đủ 6 phần:
+brief đủ 7 phần:
 
 1. **Mục tiêu** — một câu, một kết quả.
 2. **Bối cảnh** — thông tin nó không thể tự suy ra (phiên bản, lỗi, đoạn code).
@@ -62,6 +62,7 @@ brief đủ 6 phần:
 4. **Ràng buộc** — chỉ đọc hay được sửa, không thêm dependency, phạm vi.
 5. **Tiêu chí đạt** — kiểm tra nào phải đúng.
 6. **Định dạng đầu ra** — bảng `file:dòng`, diff, JSON… kèm giới hạn độ dài.
+7. **Kiểm tra trước khi trả lời** — lệnh/điểm kiểm tra nó phải tự chạy.
 
 Đừng đưa bí mật vào brief; hãy tự kiểm tra lại câu trả lời trước khi dùng.
 
